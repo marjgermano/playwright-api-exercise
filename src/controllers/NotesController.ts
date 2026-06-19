@@ -1,0 +1,16 @@
+import { APIRequestContext } from "@playwright/test";
+import { BaseAPIClient } from "./BaseAPIClient";
+import { API_ROUTES } from "../constants/apiRoutes";
+
+export class NotesController extends BaseAPIClient {
+  constructor(request: APIRequestContext) {
+    super(request);
+  }
+
+  /**
+   * REQ-HLTH-01: Check the health of the API Notes service
+   */
+  async getHealthStatus() {
+    return await this.request.get(API_ROUTES.healthCheck);
+  }
+}
