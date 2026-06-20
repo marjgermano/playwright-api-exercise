@@ -13,4 +13,14 @@ export class NotesController extends BaseAPIClient {
   async getHealthStatus() {
     return await this.request.get(API_ROUTES.healthCheck);
   }
+
+  /**
+   * REQ-USER-01: Register a new user account
+   * @param userData Object containing name, email, and password
+   */
+  async registerUser(userData: Record<string, string>) {
+    return await this.request.post(API_ROUTES.users.register, {
+      data: userData,
+    });
+  }
 }

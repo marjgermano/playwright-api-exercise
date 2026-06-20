@@ -1,6 +1,6 @@
 # Requirement Traceability Matrix (RTM)
 
-**Project:** Expand Testing Notes API  
+**Project:** Expand Testing Notes API Automation  
 **Automation Framework:** Playwright (TypeScript)
 
 ### Status Legend
@@ -10,22 +10,31 @@
 
 ---
 
-| Req ID          | Test Case ID | Component / Module | Business Requirement Description      | HTTP Method | API Endpoint                         | Status       |
-| :-------------- | :----------- | :----------------- | :------------------------------------ | :---------- | :----------------------------------- | :----------- |
-| **REQ-HLTH-01** | `TC-HLTH-01` | **Health**         | Verify core service availability.     | `GET`       | `/health-check`                      | 🟢 Completed |
-| **REQ-USER-01** | `TC-USER-01` | **Users**          | Account registration engine.          | `POST`      | `/users/register`                    | ⚪ Pending   |
-| **REQ-USER-02** | `TC-USER-01` | **Users**          | Session authentication engine.        | `POST`      | `/users/login`                       | ⚪ Pending   |
-| **REQ-USER-03** | `TC-USER-02` | **Users**          | View secure profile details.          | `GET`       | `/users/profile`                     | ⚪ Pending   |
-| **REQ-USER-04** | `TC-USER-02` | **Users**          | Update profile information.           | `PATCH`     | `/users/profile`                     | ⚪ Pending   |
-| **REQ-USER-05** | `TC-USER-03` | **Users**          | Request a password reset link.        | `POST`      | `/users/forgot-password`             | ⚪ Pending   |
-| **REQ-USER-06** | `TC-USER-03` | **Users**          | Verify password reset tokens.         | `POST`      | `/users/verify-reset-password-token` | ⚪ Pending   |
-| **REQ-USER-07** | `TC-USER-03` | **Users**          | Reset password with token.            | `POST`      | `/users/reset-password`              | ⚪ Pending   |
-| **REQ-USER-08** | `TC-USER-04` | **Users**          | Change password while active.         | `POST`      | `/users/change-password`             | ⚪ Pending   |
-| **REQ-USER-09** | `TC-USER-01` | **Users**          | Secure session termination (Logout).  | `DELETE`    | `/users/logout`                      | ⚪ Pending   |
-| **REQ-USER-10** | `TC-USER-05` | **Users**          | Permanent account destruction.        | `DELETE`    | `/users/delete-account`              | ⚪ Pending   |
-| **REQ-NOTE-01** | `TC-NOTE-01` | **Notes**          | Create a brand new note entry.        | `POST`      | `/notes`                             | ⚪ Pending   |
-| **REQ-NOTE-02** | `TC-NOTE-01` | **Notes**          | Fetch all notes for active session.   | `GET`       | `/notes`                             | ⚪ Pending   |
-| **REQ-NOTE-03** | `TC-NOTE-01` | **Notes**          | Fetch one single note by its ID.      | `GET`       | `/notes/{id}`                        | ⚪ Pending   |
-| **REQ-NOTE-04** | `TC-NOTE-01` | **Notes**          | Full text update of an existing note. | `PUT`       | `/notes/{id}`                        | ⚪ Pending   |
-| **REQ-NOTE-05** | `TC-NOTE-01` | **Notes**          | Toggle completion status patch.       | `PATCH`     | `/notes/{id}`                        | ⚪ Pending   |
-| **REQ-NOTE-06** | `TC-NOTE-01` | **Notes**          | Delete a single note by its ID.       | `DELETE`    | `/notes/{id}`                        | ⚪ Pending   |
+| Req ID          | Test Case ID | Component | Business Requirement Description                                                      | HTTP Method | API Endpoint                         | Status       |
+| :-------------- | :----------- | :-------- | :------------------------------------------------------------------------------------ | :---------- | :----------------------------------- | :----------- |
+| **REQ-HLTH-01** | TC-HLTH-01   | Health    | Verify core service availability returns `200 OK`.                                    | GET         | `/health-check`                      | 🟢 Completed |
+| **REQ-USER-01** | TC-USER-01   | Users     | Verify successful user registration with valid payload (`201`).                       | POST        | `/users/register`                    | 🟢 Completed |
+| **REQ-USER-01** | TC-USER-02   | Users     | Verify registration fails with duplicate email address (`400`).                       | POST        | `/users/register`                    | ⚪ Pending   |
+| **REQ-USER-01** | TC-USER-03   | Users     | Verify registration fails with missing required fields / invalid data format (`400`). | POST        | `/users/register`                    | ⚪ Pending   |
+| **REQ-USER-02** | TC-USER-04   | Users     | Verify successful login with correct registered credentials (`200`).                  | POST        | `/users/login`                       | ⚪ Pending   |
+| **REQ-USER-02** | TC-USER-05   | Users     | Verify login fails with incorrect or un-registered credentials (`400`).               | POST        | `/users/login`                       | ⚪ Pending   |
+| **REQ-USER-03** | TC-USER-06   | Users     | Verify viewing secure profile details with valid `x-auth-token` (`200`).              | GET         | `/users/profile`                     | ⚪ Pending   |
+| **REQ-USER-03** | TC-USER-07   | Users     | Verify profile retrieval fails if `x-auth-token` is missing or invalid (`401`).       | GET         | `/users/profile`                     | ⚪ Pending   |
+| **REQ-USER-04** | TC-USER-08   | Users     | Verify updating profile information with a valid payload (`200`).                     | PATCH       | `/users/profile`                     | ⚪ Pending   |
+| **REQ-USER-04** | TC-USER-09   | Users     | Verify profile updates fail if payload values fail validation rules (`400`).          | PATCH       | `/users/profile`                     | ⚪ Pending   |
+| **REQ-USER-05** | TC-USER-10   | Users     | Verify requesting a password reset link with a valid user email (`200`).              | POST        | `/users/forgot-password`             | ⚪ Pending   |
+| **REQ-USER-06** | TC-USER-11   | Users     | Verify reset password token verification with a valid token (`200`).                  | POST        | `/users/verify-reset-password-token` | ⚪ Pending   |
+| **REQ-USER-07** | TC-USER-12   | Users     | Verify resetting password with valid token and strong password (`200`).               | POST        | `/users/reset-password`              | ⚪ Pending   |
+| **REQ-USER-08** | TC-USER-13   | Users     | Verify changing account password while logged in successfully (`200`).                | POST        | `/users/change-password`             | ⚪ Pending   |
+| **REQ-USER-09** | TC-USER-14   | Users     | Verify secure session termination invalidates token on logout (`200`).                | DELETE      | `/users/logout`                      | ⚪ Pending   |
+| **REQ-USER-10** | TC-USER-15   | Users     | Verify permanent account destruction deletes all user profile data (`200`).           | DELETE      | `/users/delete-account`              | ⚪ Pending   |
+| **REQ-NOTE-01** | TC-NOTE-01   | Notes     | Verify creating a brand new note entry with title, description, category (`200`).     | POST        | `/notes`                             | ⚪ Pending   |
+| **REQ-NOTE-01** | TC-NOTE-02   | Notes     | Verify note creation fails if title or description is missing from body (`400`).      | POST        | `/notes`                             | ⚪ Pending   |
+| **REQ-NOTE-02** | TC-NOTE-03   | Notes     | Verify fetching all notes linked to the active authenticated session (`200`).         | GET         | `/notes`                             | ⚪ Pending   |
+| **REQ-NOTE-02** | TC-NOTE-04   | Notes     | Verify filtering/searching notes using query parameters (e.g., category) (`200`).     | GET         | `/notes`                             | ⚪ Pending   |
+| **REQ-NOTE-03** | TC-NOTE-05   | Notes     | Verify fetching a single note entry using its unique resource ID (`200`).             | GET         | `/notes/{id}`                        | ⚪ Pending   |
+| **REQ-NOTE-03** | TC-NOTE-06   | Notes     | Verify single note fetch returns error if note ID does not exist (`404`).             | GET         | `/notes/{id}`                        | ⚪ Pending   |
+| **REQ-NOTE-03** | TC-NOTE-07   | Notes     | Verify note fetch fails with a `400` error if the ID format is malformed (`400`).     | GET         | `/notes/{id}`                        | ⚪ Pending   |
+| **REQ-NOTE-04** | TC-NOTE-08   | Notes     | Verify complete replacement/update of an existing note via PUT (`200`).               | PUT         | `/notes/{id}`                        | ⚪ Pending   |
+| **REQ-NOTE-05** | TC-NOTE-09   | Notes     | Verify partial patch of an existing note (e.g., toggle completed status) (`200`).     | PATCH       | `/notes/{id}`                        | ⚪ Pending   |
+| **REQ-NOTE-06** | TC-NOTE-10   | Notes     | Verify successful deletion of a single note entry by its ID (`200`).                  | DELETE      | `/notes/{id}`                        | ⚪ Pending   |
