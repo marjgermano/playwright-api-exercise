@@ -24,9 +24,26 @@ export class NotesController extends BaseAPIClient {
     });
   }
 
+  /**
+   * REQ-USER-02: Log in user account
+   */
+
   async loginUser(userData: Record<string, string>) {
     return await this.request.post(API_ROUTES.users.login, {
       data: userData,
     });
+  }
+
+  /**
+   * REQ-USER-03: Verify token
+   */
+
+  async getUserProfile(token: string) {
+    const response = await this.request.get(API_ROUTES.users.profile, {
+      headers: {
+        "x-auth-token": token,
+      },
+    });
+    return response;
   }
 }

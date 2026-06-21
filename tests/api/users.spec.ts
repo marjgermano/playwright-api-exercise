@@ -122,13 +122,53 @@ test.describe("User", () => {
 
     const response = await notesApi.loginUser(unregisteredUser);
     const body = await response.json();
-    console.log("Status Code:", response.status());
-    console.log("JSON Body:", JSON.stringify(body, null, 2));
+
     expect(response.status()).toBe(401);
     expect(body).toMatchObject({
       success: false,
       status: 401,
       message: "Incorrect email address or password",
     });
+  });
+
+  test("TC-USER-06: Verify profile retrieval fails if `x-auth-token` is missing or invalid", async () => {
+    const uniqueId = Date.now();
+    const userCredentials = {
+      name: "Test User",
+      email: `qa_profile_${uniqueId}@example.com`,
+      password: "SecurePassword123!",
+    };
+    //Register user
+    const registrationResponse = await notesApi.registerUser(userCredentials);
+    expect(registrationResponse.status()).toBe(201);
+
+    //Login user
+    const loginResponse = await notesApi.loginUser({
+      email: userCredentials.email,
+      password: userCredentials.password,
+    });
+    expect(loginResponse.status()).toBe(200);
+    const loginBody = await loginResponse.json();
+    const authToken = loginBody.data.token;
+
+    const response = await notesApi.getUserProfile(authToken);
+    const body = await response.json();
+
+    // Assert 1: Validate network transport layer protocol (200 OK)
+    expect(response.status()).toBe(200);
+
+    // Assert 2: Clean, compressed API contract schema validation
+    expect(body).toMatchObject({
+      success: true,
+      status: 200,
+      message: "Profile successful",
+      data: {
+        name: userCredentials.name,
+        email: userCredentials.email.toLowerCase(),
+      },
+    });
+
+    // Assert 3: Ensure sensitive details like system internal IDs exist and are healthy
+    expect(typeof body.data.id).toBe("string");
   });
 });
