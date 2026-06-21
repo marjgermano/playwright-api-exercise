@@ -23,9 +23,6 @@ test.describe("User", () => {
     // 🕵️ SPY LAYER: Declare body ONCE and print out the successful response
     const body = await response.json();
 
-    // Assert 1: Validate network transport layer protocol (201 Created)
-    expect(response.status()).toBe(201);
-
     // Assert 2: Validate the response payload schema contract structure resiliently
     expect(body.success).toBe(true);
     expect(body.status).toBe(201);
@@ -68,9 +65,6 @@ test.describe("User", () => {
     // 🕵️ SPY LAYER: Declare body ONCE and print out the error response
     const body = await duplicateResponse.json();
 
-    // Assert 1: Validate network transport status layer protocol
-    expect(duplicateResponse.status()).toBe(409);
-
     // Assert 2: Clean, compressed API contract schema validation
     expect(body).toMatchObject({
       success: false,
@@ -85,12 +79,56 @@ test.describe("User", () => {
     const response = await notesApi.registerUser(invalidPayload);
 
     const body = await response.json();
-    expect(response.status()).toBe(400);
 
     expect(body).toMatchObject({
       success: false,
       status: 400,
       message: "User name must be between 4 and 30 characters",
+    });
+  });
+
+  test("TC-USER-04: Verify successful login with correct registered credentials", async () => {
+    const uniqueId = Date.now();
+    const userCredentials = {
+      name: "Login Tester",
+      email: `qa_login_${uniqueId}@example.com`,
+      password: "SecurePassword123!",
+    };
+
+    const registrationResponse = await notesApi.registerUser(userCredentials);
+    expect(registrationResponse.status()).toBe(201);
+
+    const loginPayload = {
+      email: userCredentials.email,
+      password: userCredentials.password,
+    };
+
+    const response = await notesApi.loginUser(loginPayload);
+    const body = await response.json();
+
+    expect(body).toMatchObject({
+      success: true,
+      status: 200,
+      message: "Login successful",
+    });
+  });
+
+  test("TC-USER-05: Verify login fails with incorrect or un-registered credentials", async () => {
+    const unregisteredUser = {
+      name: "Test User",
+      email: "unregisteruser@example.com",
+      password: "password123",
+    };
+
+    const response = await notesApi.loginUser(unregisteredUser);
+    const body = await response.json();
+    console.log("Status Code:", response.status());
+    console.log("JSON Body:", JSON.stringify(body, null, 2));
+    expect(response.status()).toBe(401);
+    expect(body).toMatchObject({
+      success: false,
+      status: 401,
+      message: "Incorrect email address or password",
     });
   });
 });

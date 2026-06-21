@@ -16,7 +16,7 @@
 | **REQ-USER-01** | TC-USER-01   | Users     | Verify successful user registration with valid payload (`201`).                       | POST        | `/users/register`                    |   🟢   |
 | **REQ-USER-01** | TC-USER-02   | Users     | Verify registration fails with duplicate email address (`400`).                       | POST        | `/users/register`                    |   🟢   |
 | **REQ-USER-01** | TC-USER-03   | Users     | Verify registration fails with missing required fields / invalid data format (`400`). | POST        | `/users/register`                    |   🟢   |
-| **REQ-USER-02** | TC-USER-04   | Users     | Verify successful login with correct registered credentials (`200`).                  | POST        | `/users/login`                       |   ⚪   |
+| **REQ-USER-02** | TC-USER-04   | Users     | Verify successful login with correct registered credentials (`200`).                  | POST        | `/users/login`                       |   🟢   |
 | **REQ-USER-02** | TC-USER-05   | Users     | Verify login fails with incorrect or un-registered credentials (`400`).               | POST        | `/users/login`                       |   ⚪   |
 | **REQ-USER-03** | TC-USER-06   | Users     | Verify viewing secure profile details with valid `x-auth-token` (`200`).              | GET         | `/users/profile`                     |   ⚪   |
 | **REQ-USER-03** | TC-USER-07   | Users     | Verify profile retrieval fails if `x-auth-token` is missing or invalid (`401`).       | GET         | `/users/profile`                     |   ⚪   |

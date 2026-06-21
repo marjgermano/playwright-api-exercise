@@ -23,4 +23,10 @@ export class NotesController extends BaseAPIClient {
       data: userData,
     });
   }
+
+  async loginUser(userData: Record<string, string>) {
+    return await this.request.post(API_ROUTES.users.login, {
+      data: userData,
+    });
+  }
 }
