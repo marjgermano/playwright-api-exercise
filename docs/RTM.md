@@ -20,7 +20,7 @@
 | **REQ-USER-02** | TC-USER-05   | Users     | Verify login fails with incorrect or un-registered credentials (`400`).               | POST        | `/users/login`                       |   🟢   |
 | **REQ-USER-03** | TC-USER-06   | Users     | Verify viewing secure profile details with valid `x-auth-token` (`200`).              | GET         | `/users/profile`                     |   🟢   |
 | **REQ-USER-03** | TC-USER-07   | Users     | Verify profile retrieval fails if `x-auth-token` is missing or invalid (`401`).       | GET         | `/users/profile`                     |   🟢   |
-| **REQ-USER-04** | TC-USER-08   | Users     | Verify updating profile information with a valid payload (`200`).                     | PATCH       | `/users/profile`                     |   ⚪   |
+| **REQ-USER-04** | TC-USER-08   | Users     | Verify updating profile information with a valid payload (`200`).                     | PATCH       | `/users/profile`                     |   🟢   |
 | **REQ-USER-04** | TC-USER-09   | Users     | Verify profile updates fail if payload values fail validation rules (`400`).          | PATCH       | `/users/profile`                     |   ⚪   |
 | **REQ-USER-05** | TC-USER-10   | Users     | Verify requesting a password reset link with a valid user email (`200`).              | POST        | `/users/forgot-password`             |   ⚪   |
 | **REQ-USER-06** | TC-USER-11   | Users     | Verify reset password token verification with a valid token (`200`).                  | POST        | `/users/verify-reset-password-token` |   ⚪   |

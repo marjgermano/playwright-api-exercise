@@ -176,13 +176,60 @@ test.describe("User", () => {
     const missingTokenResponse = await notesApi.getUserProfile("");
 
     const missingTokenBody = await missingTokenResponse.json();
-    console.log("STATUS:", missingTokenResponse.status());
-    console.log("BODY:", JSON.stringify(missingTokenBody, null, 2));
     expect(missingTokenResponse.status()).toBe(401);
     expect(missingTokenBody).toMatchObject({
       success: false,
       status: 401,
       message: "No authentication token specified in x-auth-token header",
+    });
+  });
+
+  test("TC-USER-08: Verify updating profile information with a valid payload.", async () => {
+    const uniqueId = Date.now();
+    const userCredentials = {
+      name: "Before update name",
+      email: `qa_update_${uniqueId}@example.com`,
+      password: "SecurePassword123!",
+    };
+
+    const updatedPayload = {
+      name: "Fully updated name",
+      phone: "1234567890",
+      company: "QA Automation Corp",
+    };
+
+    //Register the user
+    const registrationResponse = await notesApi.registerUser(userCredentials);
+    expect(registrationResponse.status()).toBe(201);
+
+    //Log in user
+    const loginResponse = await notesApi.loginUser({
+      email: userCredentials.email,
+      password: userCredentials.password,
+    });
+    expect(loginResponse.status()).toBe(200);
+
+    const loginBody = await loginResponse.json();
+    const authToken = loginBody.data.token;
+
+    const response = await notesApi.updateUserProfile(
+      authToken,
+      updatedPayload,
+    );
+    const body = await response.json();
+    console.log("REAL HTTP STATUS CODE:", response.status());
+    console.log("REAL JSON PAYLOAD BODY:", JSON.stringify(body, null, 2));
+    expect(response.status()).toBe(200);
+    expect(body).toMatchObject({
+      success: true,
+      status: 200,
+      message: "Profile updated successful",
+      data: {
+        name: updatedPayload.name,
+        email: userCredentials.email.toLowerCase(), // Email shouldn't change
+        phone: updatedPayload.phone,
+        company: updatedPayload.company,
+      },
     });
   });
 });

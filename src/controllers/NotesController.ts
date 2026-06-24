@@ -46,4 +46,27 @@ export class NotesController extends BaseAPIClient {
     });
     return response;
   }
+
+  /**
+   Verify profile update
+   */
+
+  /**
+   * Update the secure user profile details
+   * @param token The valid x-auth-token string
+   * @param updatedData The payload containing the fields to update (e.g., name, phone, company)
+   */
+  async updateUserProfile(
+    token: string,
+    updatedData: { name?: string; phone?: string; company?: string },
+  ) {
+    const response = await this.request.patch(API_ROUTES.users.profile, {
+      headers: {
+        "x-auth-token": token,
+      },
+      data: updatedData,
+    });
+
+    return response;
+  }
 }
