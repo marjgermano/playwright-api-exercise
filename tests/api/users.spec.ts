@@ -171,4 +171,18 @@ test.describe("User", () => {
     // Assert 3: Ensure sensitive details like system internal IDs exist and are healthy
     expect(typeof body.data.id).toBe("string");
   });
+
+  test("TC-USER-07: Verify profile retrieval fails if `x-auth-token` is missing or invalid", async () => {
+    const missingTokenResponse = await notesApi.getUserProfile("");
+
+    const missingTokenBody = await missingTokenResponse.json();
+    console.log("STATUS:", missingTokenResponse.status());
+    console.log("BODY:", JSON.stringify(missingTokenBody, null, 2));
+    expect(missingTokenResponse.status()).toBe(401);
+    expect(missingTokenBody).toMatchObject({
+      success: false,
+      status: 401,
+      message: "No authentication token specified in x-auth-token header",
+    });
+  });
 });
