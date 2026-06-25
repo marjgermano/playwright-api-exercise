@@ -265,14 +265,28 @@ test.describe("User", () => {
       invalidPayload,
     );
     const body = await response.json();
-    console.log("STATUS:", response.status());
-    console.log("JSONbody:", JSON.stringify(body, null, 2));
 
     expect(response.status()).toBe(400);
     expect(body).toMatchObject({
       success: false,
       status: 400,
       message: "Phone number should be between 8 and 20 digits",
+    });
+  });
+
+  test("TC-USER-10: Verify requesting a password reset link with a valid user email", async () => {
+    const testPayload = {
+      email: "testEmail@example.com",
+    };
+
+    const response = await notesApi.forgotPassword(testPayload);
+    const body = await response.json();
+    expect(response.status()).toBe(200);
+    expect(body).toMatchObject({
+      success: true,
+      status: 200,
+      message:
+        "Password reset link successfully sent to testEmail@example.com. Please verify by clicking on the given link",
     });
   });
 });

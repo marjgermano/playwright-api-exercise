@@ -8,14 +8,14 @@ export class NotesController extends BaseAPIClient {
   }
 
   /**
-   * REQ-HLTH-01: Check the health of the API Notes service
+   Check the health of the API Notes service
    */
   async getHealthStatus() {
     return await this.request.get(API_ROUTES.healthCheck);
   }
 
   /**
-   * REQ-USER-01: Register a new user account
+   * Register a new user account
    * @param userData Object containing name, email, and password
    */
   async registerUser(userData: Record<string, string>) {
@@ -25,7 +25,7 @@ export class NotesController extends BaseAPIClient {
   }
 
   /**
-   * REQ-USER-02: Log in user account
+   Log in user account
    */
 
   async loginUser(userData: Record<string, string>) {
@@ -35,7 +35,7 @@ export class NotesController extends BaseAPIClient {
   }
 
   /**
-   * REQ-USER-03: Verify token
+   Verify token
    */
 
   async getUserProfile(token: string) {
@@ -67,6 +67,16 @@ export class NotesController extends BaseAPIClient {
       data: updatedData,
     });
 
+    return response;
+  }
+
+  /**
+   Password
+   */
+  async forgotPassword(payload: { email: string }) {
+    const response = await this.request.post(API_ROUTES.users.forgotPassword, {
+      data: payload,
+    });
     return response;
   }
 }
