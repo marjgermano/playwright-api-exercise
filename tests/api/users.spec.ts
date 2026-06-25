@@ -217,8 +217,7 @@ test.describe("User", () => {
       updatedPayload,
     );
     const body = await response.json();
-    console.log("REAL HTTP STATUS CODE:", response.status());
-    console.log("REAL JSON PAYLOAD BODY:", JSON.stringify(body, null, 2));
+
     expect(response.status()).toBe(200);
     expect(body).toMatchObject({
       success: true,
@@ -230,6 +229,50 @@ test.describe("User", () => {
         phone: updatedPayload.phone,
         company: updatedPayload.company,
       },
+    });
+  });
+
+  test("TC-USER-09: Verify profile updates fail if payload values fail validation rules", async () => {
+    const uniqueId = Date.now();
+    const userCredentials = {
+      name: "Validator Test User",
+      email: `qa_update_${uniqueId}@example.com`,
+      password: "SecurePassword123!",
+    };
+
+    const invalidPayload = {
+      name: "Valid Name",
+      phone: "invalid-phone-letters",
+      company: "Valid Company Name",
+    };
+
+    //Register the user
+    const registrationResponse = await notesApi.registerUser(userCredentials);
+    expect(registrationResponse.status()).toBe(201);
+
+    //Log in user
+    const loginResponse = await notesApi.loginUser({
+      email: userCredentials.email,
+      password: userCredentials.password,
+    });
+    expect(loginResponse.status()).toBe(200);
+
+    const loginBody = await loginResponse.json();
+    const authToken = loginBody.data.token;
+
+    const response = await notesApi.updateUserProfile(
+      authToken,
+      invalidPayload,
+    );
+    const body = await response.json();
+    console.log("STATUS:", response.status());
+    console.log("JSONbody:", JSON.stringify(body, null, 2));
+
+    expect(response.status()).toBe(400);
+    expect(body).toMatchObject({
+      success: false,
+      status: 400,
+      message: "Phone number should be between 8 and 20 digits",
     });
   });
 });
