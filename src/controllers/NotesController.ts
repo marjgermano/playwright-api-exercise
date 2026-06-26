@@ -79,4 +79,14 @@ export class NotesController extends BaseAPIClient {
     });
     return response;
   }
+
+  async verifyResetPasswordToken(payload: { token: string }) {
+    const response = await this.request.post(
+      API_ROUTES.users.verifyResetToken,
+      {
+        data: payload,
+      },
+    );
+    return response;
+  }
 }

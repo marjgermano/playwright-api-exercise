@@ -289,4 +289,57 @@ test.describe("User", () => {
         "Password reset link successfully sent to testEmail@example.com. Please verify by clicking on the given link",
     });
   });
+
+  test("TC-USER-11: Verify reset password token verification rejects an invalid token", async () => {
+    const invalidTokenPayload = {
+      token: "completely_fake_and_malformed_token_12345",
+    };
+
+    const response =
+      await notesApi.verifyResetPasswordToken(invalidTokenPayload);
+
+    const body = await response.json();
+
+    console.log("STATUS CODE:", response.status());
+    console.log("BODY:", JSON.stringify(body, null, 2));
+
+    // Assert that the system rejects the bad token
+    expect(response.status()).toBe(401);
+    expect(body.success).toBe(false);
+    expect(body.message).toContain("invalid");
+    // const uniqueId = Date.now();
+    // const userCredentials = {
+    //   name: "Token Test User",
+    //   email: `testqa${uniqueId}@example.com`,
+    //   password: "TestPassword123",
+    // };
+
+    // const registrationResponse = await notesApi.registerUser(userCredentials);
+    // expect(registrationResponse.status()).toBe(201);
+
+    // const forgotResponse = await notesApi.forgotPassword({
+    //   email: userCredentials.email,
+    // });
+    // expect(forgotResponse.status()).toBe(200);
+
+    // const forgotBody = await forgotResponse.json();
+
+    // const resetLink = forgotBody.data?.resetLink || forgotBody.data?.token;
+
+    // if (!resetLink) {
+    //   throw new Error(
+    //     `Could not find a reset link or token inside forgotBody: ${JSON.stringify(forgotBody)}`,
+    //   );
+    // }
+
+    // // Extract the token block sitting after the final "/" character in the link string
+    // const resetToken = resetLink.substring(resetLink.lastIndexOf("/") + 1);
+
+    // const response = await notesApi.verifyResetPasswordToken({
+    //   token: resetToken,
+    // });
+    // const body = await response.json();
+    // console.log("STATUS:", response.status());
+    // console.log("BODY:", JSON.stringify(body, null, 2));
+  });
 });
