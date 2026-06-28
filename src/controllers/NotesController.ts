@@ -89,4 +89,11 @@ export class NotesController extends BaseAPIClient {
     );
     return response;
   }
+
+  async resetPassword(payload: Record<string, string>) {
+    const response = await this.request.post(API_ROUTES.users.resetPassword, {
+      data: payload,
+    });
+    return response;
+  }
 }

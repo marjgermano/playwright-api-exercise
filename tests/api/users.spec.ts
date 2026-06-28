@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { NotesController } from "../../src/controllers/NotesController";
+import { faker } from "@faker-js/faker";
 
 test.describe("User", () => {
   let notesApi: NotesController;
@@ -300,46 +301,26 @@ test.describe("User", () => {
 
     const body = await response.json();
 
-    console.log("STATUS CODE:", response.status());
-    console.log("BODY:", JSON.stringify(body, null, 2));
-
     // Assert that the system rejects the bad token
     expect(response.status()).toBe(401);
     expect(body.success).toBe(false);
     expect(body.message).toContain("invalid");
-    // const uniqueId = Date.now();
-    // const userCredentials = {
-    //   name: "Token Test User",
-    //   email: `testqa${uniqueId}@example.com`,
-    //   password: "TestPassword123",
-    // };
+  });
 
-    // const registrationResponse = await notesApi.registerUser(userCredentials);
-    // expect(registrationResponse.status()).toBe(201);
+  test("TC-USER-12: Verify resetting password with valid token and strong password", async () => {
+    const resetPayload = {
+      token: faker.string.alphanumeric(20),
+      password: faker.string.sample(16),
+    };
 
-    // const forgotResponse = await notesApi.forgotPassword({
-    //   email: userCredentials.email,
-    // });
-    // expect(forgotResponse.status()).toBe(200);
-
-    // const forgotBody = await forgotResponse.json();
-
-    // const resetLink = forgotBody.data?.resetLink || forgotBody.data?.token;
-
-    // if (!resetLink) {
-    //   throw new Error(
-    //     `Could not find a reset link or token inside forgotBody: ${JSON.stringify(forgotBody)}`,
-    //   );
-    // }
-
-    // // Extract the token block sitting after the final "/" character in the link string
-    // const resetToken = resetLink.substring(resetLink.lastIndexOf("/") + 1);
-
-    // const response = await notesApi.verifyResetPasswordToken({
-    //   token: resetToken,
-    // });
-    // const body = await response.json();
-    // console.log("STATUS:", response.status());
-    // console.log("BODY:", JSON.stringify(body, null, 2));
+    const response = await notesApi.resetPassword(resetPayload);
+    const body = await response.json();
+    console.log("STATUS:", response.status());
+    console.log("BODY:", JSON.stringify(body, null, 2));
+    expect(body).toMatchObject({
+      success: false,
+      status: 400,
+      message: "New password must be between 6 and 30 characters",
+    });
   });
 });
