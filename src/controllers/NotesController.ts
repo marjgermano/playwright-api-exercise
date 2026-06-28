@@ -96,4 +96,14 @@ export class NotesController extends BaseAPIClient {
     });
     return response;
   }
+
+  async changePassword(token: string, payload: Record<string, string>) {
+    const response = await this.request.post(API_ROUTES.users.changePassword, {
+      headers: {
+        "x-auth-token": token,
+      },
+      data: payload,
+    });
+    return response;
+  }
 }

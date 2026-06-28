@@ -315,12 +315,48 @@ test.describe("User", () => {
 
     const response = await notesApi.resetPassword(resetPayload);
     const body = await response.json();
-    console.log("STATUS:", response.status());
-    console.log("BODY:", JSON.stringify(body, null, 2));
     expect(body).toMatchObject({
       success: false,
       status: 400,
       message: "New password must be between 6 and 30 characters",
+    });
+  });
+
+  test("TC-USER-13: Verify changing account password while logged in successfully", async () => {
+    const currentPassword = faker.string.sample(16);
+    const newPassword = faker.string.sample(16);
+
+    const userCredentials = {
+      name: faker.person.fullName(),
+      email: faker.internet.email().toLowerCase(),
+      password: currentPassword,
+    };
+
+    const registrationResponse = await notesApi.registerUser(userCredentials);
+    expect(registrationResponse.status()).toBe(201);
+
+    const loginResponse = await notesApi.loginUser({
+      email: userCredentials.email,
+      password: currentPassword,
+    });
+    expect(loginResponse.status()).toBe(200);
+
+    const loginBody = await loginResponse.json();
+    const validToken = loginBody.data.token;
+
+    const changePayload = {
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    };
+
+    const response = await notesApi.changePassword(validToken, changePayload);
+    const body = await response.json();
+
+    expect(response.status()).toBe(200);
+    expect(body).toMatchObject({
+      success: true,
+      status: 200,
+      message: "The password was successfully updated",
     });
   });
 });
