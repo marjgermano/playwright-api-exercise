@@ -106,4 +106,13 @@ export class NotesController extends BaseAPIClient {
     });
     return response;
   }
+
+  async logoutUser(token: string) {
+    const response = await this.request.delete(API_ROUTES.users.logout, {
+      headers: {
+        "x-auth-token": token,
+      },
+    });
+    return response;
+  }
 }

@@ -26,7 +26,7 @@
 | **REQ-USER-06** | TC-USER-11   | Users     | Verify reset password token verification rejects an invalid or expired token (`401`). | POST        | `/users/verify-reset-password-token` |   🟢   |
 | **REQ-USER-07** | TC-USER-12   | Users     | Verify resetting password rejects an invalid or expired token configuration (`401`).  | POST        | `/users/reset-password`              |   🟢   |
 | **REQ-USER-08** | TC-USER-13   | Users     | Verify changing account password while logged in successfully (`200`).                | POST        | `/users/change-password`             |   🟢   |
-| **REQ-USER-09** | TC-USER-14   | Users     | Verify secure session termination invalidates token on logout (`200`).                | DELETE      | `/users/logout`                      |   ⚪   |
+| **REQ-USER-09** | TC-USER-14   | Users     | Verify secure session termination invalidates token on logout (`200`).                | DELETE      | `/users/logout`                      |   🟢   |
 | **REQ-USER-10** | TC-USER-15   | Users     | Verify permanent account destruction deletes all user profile data (`200`).           | DELETE      | `/users/delete-account`              |   ⚪   |
 | **REQ-NOTE-01** | TC-NOTE-01   | Notes     | Verify creating a brand new note entry with title, description, category (`200`).     | POST        | `/notes`                             |   ⚪   |
 | **REQ-NOTE-01** | TC-NOTE-02   | Notes     | Verify note creation fails if title or description is missing from body (`400`).      | POST        | `/notes`                             |   ⚪   |

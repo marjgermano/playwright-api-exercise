@@ -359,4 +359,46 @@ test.describe("User", () => {
       message: "The password was successfully updated",
     });
   });
+
+  test("TC-USER-14: Verify secure session termination invalidates token on logout", async () => {
+    const userCredentials = {
+      name: faker.person.fullName(),
+      email: faker.internet.email(),
+      password: faker.string.sample(16),
+    };
+
+    const registrationResponse = await notesApi.registerUser(userCredentials);
+    expect(registrationResponse.status()).toBe(201);
+
+    const loginResponse = await notesApi.loginUser({
+      email: userCredentials.email,
+      password: userCredentials.password,
+    });
+
+    expect(loginResponse.status()).toBe(200);
+    const loginBody = await loginResponse.json();
+    const activeAuthToken = await loginBody.data.token;
+
+    const logoutResponse = await notesApi.logoutUser(activeAuthToken);
+    expect(logoutResponse.status()).toBe(200);
+
+    const logoutBody = await logoutResponse.json();
+
+    expect(logoutBody).toMatchObject({
+      success: true,
+      status: 200,
+      message: "User has been successfully logged out",
+    });
+
+    const profileResponse = await notesApi.getUserProfile(activeAuthToken);
+    expect(profileResponse.status()).toBe(401);
+
+    const profileBody = await profileResponse.json();
+    expect(profileBody).toMatchObject({
+      success: false,
+      status: 401,
+      message:
+        "Access token is not valid or has expired, you will need to login",
+    });
+  });
 });
